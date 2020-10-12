@@ -6,8 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"web_go/Public/Mysql"
-	"web_go/Public/Redis"
+	ConnectPoolFactory "web_go/Public/ConnectPool"
 	Configs "web_go/Public/Utils"
 )
 
@@ -41,8 +40,8 @@ func Run()  {
 	//容器扫描配置
 	c.scanConfig()
 	Configs.GetContext().SetConfig(c.config)
-	Mysql.GetInstance().InitDbPool()
-	Redis.GetInstance().InitRedisPool(0)
+	ConnectPoolFactory.NewMysql()
+	ConnectPoolFactory.NewRedis()
 }
 
 //实现接口 扫描配置目录
