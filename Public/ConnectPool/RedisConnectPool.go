@@ -21,6 +21,14 @@ func NewRedis(db ...int) (result bool) {
 	return result
 }
 
+//redis工厂选择加载的redis库
+func SelectDb(db int) (result bool) {
+	redisDb = db
+	result = NewConnect("redis").GetInstance().InitConnectPool()
+
+	return result
+}
+
 //redis工厂获取redis连接池
 func GetRedis() (redisPool *redis.Pool, err error)  {
 	redisConnect,errRedis := NewConnect("redis").GetInstance().GetConnectLibrary()
