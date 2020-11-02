@@ -30,9 +30,15 @@ func init()  {
 	}
 	os.Getenv(".env")
 	yamlPath = os.Getenv("YAML_PATH")
+
 }
 
-func Run()  {
+
+func New()  {
+	run()
+}
+
+func run()  {
 	var c = contain{
 		config: map[string]map[string]string{},
 	}
@@ -42,6 +48,7 @@ func Run()  {
 	Configs.GetContext().SetConfig(c.config)
 	ConnectPoolFactory.NewMysql()
 	ConnectPoolFactory.NewRedis()
+
 }
 
 //实现接口 扫描配置目录

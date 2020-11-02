@@ -11,7 +11,7 @@ import (
 
 type Pool interface {
 	GetInstance() *ConnectPool
-	InitConnectPool(connect string) bool
+	InitConnectPool() bool
 	GetConnectLibrary() (interface{}, error)
 }
 
