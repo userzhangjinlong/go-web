@@ -34,7 +34,7 @@ func init()  {
 }
 
 
-func New()  {
+func Run()  {
 	run()
 }
 
@@ -46,8 +46,12 @@ func run()  {
 	//容器扫描配置
 	c.scanConfig()
 	Configs.GetContext().SetConfig(c.config)
+	//加载mysql redis实例
 	ConnectPoolFactory.NewMysql()
 	ConnectPoolFactory.NewRedis()
+
+	//扫描路由文件
+
 
 }
 
