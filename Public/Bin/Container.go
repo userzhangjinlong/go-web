@@ -8,6 +8,7 @@ import (
 	"os"
 	ConnectPoolFactory "web_go/Public/ConnectPool"
 	Configs "web_go/Public/Utils"
+	"web_go/Route"
 )
 
 type container interface {
@@ -34,7 +35,7 @@ func init()  {
 }
 
 
-func Run()  {
+func Run() {
 	run()
 }
 
@@ -51,6 +52,8 @@ func run()  {
 	ConnectPoolFactory.NewRedis()
 
 	//扫描路由文件
+	router := Route.RegisterRoutes()
+	router.Run()
 
 
 }
