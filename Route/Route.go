@@ -1,6 +1,7 @@
 package Route
 
 import (
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,8 +20,8 @@ const (
 func getWebRoute() map[string][][]string{
 	routes := map[string][][]string{
 		"v1":{
-			{MethodGet, "/index", "IndexController@index"},
-			{MethodGet, "/index1", "IndexController@index1"},
+			{MethodGet, "/index", "Index.Index"},
+			{MethodGet, "/index1", "Index.Index1"},
 		},
 	}
 
@@ -30,6 +31,8 @@ func getWebRoute() map[string][][]string{
 
 func RegisterRoutes() *gin.Engine {
 	router := gin.Default()
+	// 调试模式，开启 pprof 包，便于开发阶段分析程序性能
+	pprof.Register(router)
 
 	webRoute := getWebRoute()
 
@@ -39,9 +42,8 @@ func RegisterRoutes() *gin.Engine {
 			for i := 0; i < len(routes); i++  {
 				switch routes[i][0] {
 					case MethodGet:
-						group.GET(routes[i][1], func(context *gin.Context) {
-							context.Status(200)
-						})
+						//这里后续写增加回调方法的工厂方法调用指定位置的回调方法
+						group.GET(routes[i][1])
 				}
 			}
 		}

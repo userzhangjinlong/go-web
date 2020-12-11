@@ -53,7 +53,7 @@ func run()  {
 
 	//扫描路由文件
 	router := Route.RegisterRoutes()
-	router.Run()
+	router.Run(":9086")
 
 
 }
