@@ -16,6 +16,7 @@ const (
 	MethodPatch		=	"PATCH"
 	MethodConnect	=	"CONNECT"
 	MethodTract		=	"TRACE"
+	MethodAny		=	"ANY"
 )
 
 type Route struct {
@@ -58,6 +59,16 @@ func RegisterRoutes() *gin.Engine {
 					case MethodGet:
 						//这里后续写增加回调方法的工厂方法调用指定位置的回调方法
 						group.GET(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
+					case MethodPost:
+						group.POST(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
+					case MethodPut:
+						group.PUT(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
+					case MethodDelete:
+						group.DELETE(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
+					case MethodAny:
+						group.Any(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
+					default:
+						//这里使用全局异常抛出500异常未定义方法不能请求路由
 				}
 			}
 		}
