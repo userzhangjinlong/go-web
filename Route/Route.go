@@ -1,11 +1,10 @@
 package Route
 
 import (
-	"fmt"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
-	"os"
-	"web_go/App/Http/Controller"
+	"web_go/App/Factory/RouteFactory"
+	"web_go/App/Http/Validator"
 )
 
 const (
@@ -26,12 +25,13 @@ type Route struct {
 }
 
 
-func setWebRoute(context *gin.Context) map[string][]Route {
+func setWebRoute() map[string][]Route {
 
 	routes := map[string][]Route{
 		"v1":{
-			{MethodGet, "/index", (&Controller.Index{}).Index(context)},
-			{MethodGet, "/index1", Controller.Index{}},
+			//RouteFactory.CreateRoute(Controller.Index{})
+			{MethodGet, "/index", RouteFactory.CreateRoute(&Validator.Index{})},
+			//{MethodGet, "/index1", Controller.Index{}},
 		},
 	}
 
@@ -46,20 +46,18 @@ func RegisterRoutes() *gin.Engine {
 	pprof.Register(router)
 
 	//路由注入上下文内容
-	var context *gin.Context
+	//var context *gin.Context
 
-	webRoute := setWebRoute(context)
+	webRoute := setWebRoute()
 
 	for group,routes := range webRoute{
 		group := router.Group(group)
 		{
 			for i := 0; i < len(routes); i++  {
-				fmt.Println(routes[i])
-				os.Exit(1)
-				switch routes[i][0] {
+				switch routes[i].Method {
 					case MethodGet:
 						//这里后续写增加回调方法的工厂方法调用指定位置的回调方法
-						group.GET(routes[i][1])
+						group.GET(routes[i].Pattern, routes[i].Callback.(func(context *gin.Context)))
 				}
 			}
 		}

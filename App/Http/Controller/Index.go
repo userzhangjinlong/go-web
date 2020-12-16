@@ -8,6 +8,7 @@ import (
 type Index struct {
 }
 
+
 func (class *Index) Index(Context *gin.Context)  {
 	// 这里随便模拟一条数据返回
 	Response.Success(Context, "ok", gin.H{
