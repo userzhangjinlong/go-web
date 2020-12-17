@@ -35,11 +35,7 @@ func init()  {
 }
 
 
-func Run() {
-	run()
-}
-
-func run()  {
+func Run()  {
 	var c = contain{
 		config: map[string]map[string]string{},
 	}
@@ -53,7 +49,9 @@ func run()  {
 
 	//扫描路由文件
 	router := Route.RegisterRoutes()
-	router.Run(":9086")
+
+	configMap := Configs.GetContext().GetConfig()
+	router.Run(configMap["proxy"]["port"])
 
 
 }

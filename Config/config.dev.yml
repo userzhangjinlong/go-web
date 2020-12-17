@@ -10,4 +10,4 @@ settings:
     db: '0'
   proxy:
     #gin运行端口
-    port: '8080'
+    port: ':9086'
