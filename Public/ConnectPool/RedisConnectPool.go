@@ -8,12 +8,11 @@ import (
 
 //redis工厂加载redis连接池
 func NewRedis(db ...int) (result bool) {
-	var config = Configs.GetContext().GetConfig()
 	for _,v := range db{
 		if v != 0 {
 			redisDb = v
 		}else {
-			redisDb,_ = strconv.Atoi(config["redis"]["db"])
+			redisDb,_ = strconv.Atoi(Configs.Instance().GetString("db"))
 		}
 	}
 	result = NewConnect("redis").GetInstance().InitConnectPool()

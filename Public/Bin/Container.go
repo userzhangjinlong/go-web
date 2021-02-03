@@ -16,7 +16,7 @@ type container interface {
 }
 
 type contain struct {
-	config map[string]map[string]string //Config目录配置
+	config map[string]interface{} //Config目录配置
 }
 
 var yamlPath string
@@ -36,22 +36,31 @@ func init()  {
 
 
 func Run()  {
+	//map[string]string{}
 	var c = contain{
-		config: map[string]map[string]string{},
+		config: make(map[string]interface{}),
 	}
 
 	//容器扫描配置
 	c.scanConfig()
-	Configs.GetContext().SetConfig(c.config)
+	Configs.Instance().SetConfig(c.config)
+	//获取配置文件
+	Configs.Instance().GetConfig()
+	appdebug := Configs.Instance().GetBool("appDebug")
+	if appdebug == false{
+		//关闭debug调试模式 启动等各种日志都输出记录到日志文件中
+	}else{
+		//输出记录到控制台
+	}
+	
 	//加载mysql redis实例
 	ConnectPoolFactory.NewMysql()
 	ConnectPoolFactory.NewRedis()
-
+	
 	//扫描路由文件
 	router := Route.RegisterRoutes()
-
-	configMap := Configs.GetContext().GetConfig()
-	router.Run(configMap["proxy"]["port"])
+	//扫描路由启动
+	router.Run(Configs.Instance().GetString("proxy.port"))
 
 
 }
@@ -72,10 +81,17 @@ func (this *contain) scanConfig() {
 	var configMap = this.config
 	for _,v := range resultMap{
 		for key, value := range v.(map[interface{}]interface{}){
-			var tmpMap = make(map[string]string)
-			for k,val := range value.(map[interface{}]interface{}){
-				tmpMap[k.(string)] = val.(string)
+			var tmpMap = make(map[string]interface{})
+			switch value.(type) {
+			case bool:
+				tmpMap[key.(string)] = value.(bool)
+			case interface{}:
+				for k,val := range value.(map[interface{}]interface{}){
+					tmpMap[k.(string)] = val.(string)
+				}
+
 			}
+
 			configMap[key.(string)] = tmpMap
 		}
 	}

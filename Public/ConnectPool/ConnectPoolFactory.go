@@ -38,11 +38,9 @@ func (this *ConnectPool)GetInstance() *ConnectPool {
 }
 
 func (this *ConnectPool)InitConnectPool() (result bool) {
-	var config = Configs.GetContext().GetConfig()
 	switch dbType {
 		case "mysql":
-			db, errDb = gorm.Open("mysql", config["database_mysql"]["source"])
-
+			db, errDb = gorm.Open("mysql", Configs.Instance().GetString("source"))
 			if errDb != nil {
 				log.Fatal(errDb.Error())
 				return false
@@ -53,13 +51,13 @@ func (this *ConnectPool)InitConnectPool() (result bool) {
 			defer db.Close()
 			log.Println("mysql:初始化连接成功")
 		case "redis":
-			var redisAddress = config["redis"]["root"]+":"+config["redis"]["port"]
+			var redisAddress = Configs.Instance().GetString("root")+":"+Configs.Instance().GetString("redis.port")
 			pool = &redis.Pool{
 				MaxIdle:10000,
 				MaxActive:0,
 				IdleTimeout:300,
 				Dial: func() (redis.Conn, error) {
-					return redis.Dial("tcp", redisAddress,redis.DialPassword(config["redis"]["auth"]), redis.DialDatabase(redisDb))
+					return redis.Dial("tcp", redisAddress,redis.DialPassword(Configs.Instance().GetString("auth")), redis.DialDatabase(redisDb))
 				},
 			}
 
