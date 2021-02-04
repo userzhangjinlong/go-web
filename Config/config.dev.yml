@@ -1,5 +1,6 @@
 settings:
   appDebug: true
+  test: true
   database_mysql:
     #连接地址
     source: 'root:zjllikeyjj@tcp(118.24.93.170:3306)/goweb?charset=utf8&parseTime=True&loc=Local&timeout=1000ms'

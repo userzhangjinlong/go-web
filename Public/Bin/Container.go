@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"sync"
 	ConnectPoolFactory "web_go/Public/ConnectPool"
 	Configs "web_go/Public/Utils"
 	"web_go/Route"
@@ -19,7 +20,10 @@ type contain struct {
 	config map[string]interface{} //Config目录配置
 }
 
-var yamlPath string
+var (
+	yamlPath string
+	sMap sync.Map
+)
 
 /*
 *初始化env配置
@@ -49,8 +53,7 @@ func Run()  {
 	appdebug := Configs.Instance().GetBool("appDebug")
 	if appdebug == false{
 		//关闭debug调试模式 启动等各种日志都输出记录到日志文件中
-	}else{
-		//输出记录到控制台
+
 	}
 	
 	//加载mysql redis实例
@@ -85,9 +88,11 @@ func (this *contain) scanConfig() {
 			switch value.(type) {
 			case bool:
 				tmpMap[key.(string)] = value.(bool)
+				this.Set(key.(string), value.(bool))
 			case interface{}:
 				for k,val := range value.(map[interface{}]interface{}){
 					tmpMap[k.(string)] = val.(string)
+					this.Set(key.(string)+"."+k.(string), val.(string))
 				}
 
 			}
@@ -95,5 +100,21 @@ func (this *contain) scanConfig() {
 			configMap[key.(string)] = tmpMap
 		}
 	}
+	this.Set("ymlConfig", configMap)
 
+}
+
+//容器设置值
+func (this *contain) Set(key string, value interface{}) bool {
+	sMap.Store(key, value)
+	return true
+}
+
+//获取容器设置的值
+func (this *contain) Get(key string) interface{} {
+	val,ok := sMap.Load(key)
+	if ok != false {
+		return val
+	}
+	return ""
 }
