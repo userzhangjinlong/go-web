@@ -1,5 +1,5 @@
 package Utils
 
-func info() {
+func info(code int) {
 
 }
