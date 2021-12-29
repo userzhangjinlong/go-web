@@ -11,11 +11,6 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-var (
-	ErrCode     int64 = 400
-	SuccessCode int64 = 200
-)
-
 func ReturnJson(c *gin.Context, response Response) {
 	if response.Code != 200 {
 		c.Set("response", response)

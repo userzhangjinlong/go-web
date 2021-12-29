@@ -31,7 +31,7 @@ func setWebRoute() map[string][]Route {
 	//这里写入所有对应的路由插入
 	routes := map[string][]Route{
 		"v1": {
-			{MethodGet, "/index", RouteFactory.CreateRoute(&Validator.Index{})},
+			{MethodPost, "/index", RouteFactory.CreateRoute(&Validator.Index{})},
 		},
 	}
 
