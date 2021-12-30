@@ -10,13 +10,13 @@ type Context struct {
 }
 
 var (
-	once sync.Once
+	once     sync.Once
 	instance *Context
-	sMap sync.Map
+	sMap     sync.Map
 )
 
 //单例获取上下文配置
-func Instance() *Context  {
+func Instance() *Context {
 	once.Do(func() {
 		instance = &Context{
 			make(map[string]interface{}),
@@ -26,7 +26,7 @@ func Instance() *Context  {
 }
 
 //设置配置
-func (this *Context) SetConfig(conf map[string]interface{})  {
+func (this *Context) SetConfig(conf map[string]interface{}) {
 	this.config = conf
 }
 
@@ -87,12 +87,11 @@ func (this *Context) GetString(keyName string) string {
 		}
 	}
 
-
 	return returnString.(string)
 }
 
 //布尔类型获取
-func (this *Context) GetBool(keyName string) bool{
+func (this *Context) GetBool(keyName string) bool {
 	returnBool, ok := sMap.Load(keyName)
 	if ok == false {
 		keyNameArr := strings.Split(keyName, ".")
@@ -148,7 +147,6 @@ func (this *Context) GetBool(keyName string) bool{
 			}
 		}
 	}
-
 
 	return returnBool.(bool)
 }

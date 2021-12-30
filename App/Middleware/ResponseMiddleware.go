@@ -35,7 +35,6 @@ func ResponseMiddleware() gin.HandlerFunc {
 			if sysErr := recover(); sysErr != nil {
 				errMsg := fmt.Sprintf("致命错误：%s", sysErr)
 				stack := debug.Stack()
-
 				Log.Error(ErrCode.SystemError, request, errMsg+"\n"+string(stack))
 				var response Response.Response
 				response.Code = ErrCode.SystemError
