@@ -25,3 +25,19 @@ func Error(code int, data interface{}, desc string) {
 		"data": data,
 	}).Error(desc)
 }
+
+func Panic(data interface{}, desc string) {
+	logrus.WithFields(logrus.Fields{
+		"param": data,
+	}).Panic(desc)
+
+	return
+}
+
+func logToFile() {
+
+}
+
+func logToEs() {
+
+}
