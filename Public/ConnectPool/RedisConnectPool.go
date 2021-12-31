@@ -3,16 +3,18 @@ package ConnectPoolFactory
 import (
 	"github.com/garyburd/redigo/redis"
 	"strconv"
-	Configs "web_go/Public/Utils"
+	"web_go/Utils/Config"
 )
+
+var configs Config.Config
 
 //redis工厂加载redis连接池
 func NewRedis(db ...int) (result bool) {
-	for _,v := range db{
+	for _, v := range db {
 		if v != 0 {
 			redisDb = v
-		}else {
-			redisDb,_ = strconv.Atoi(Configs.Instance().GetString("db"))
+		} else {
+			redisDb, _ = strconv.Atoi(configs.GetInstance().GetString("db"))
 		}
 	}
 	result = NewConnect("redis").GetInstance().InitConnectPool()
@@ -29,8 +31,8 @@ func SelectDb(db int) (result bool) {
 }
 
 //redis工厂获取redis连接池
-func GetRedis() (redisPool *redis.Pool, err error)  {
-	redisConnect,errRedis := NewConnect("redis").GetInstance().GetConnectLibrary()
+func GetRedis() (redisPool *redis.Pool, err error) {
+	redisConnect, errRedis := NewConnect("redis").GetInstance().GetConnectLibrary()
 
-	return redisConnect.(*redis.Pool),errRedis
+	return redisConnect.(*redis.Pool), errRedis
 }

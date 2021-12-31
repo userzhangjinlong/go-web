@@ -5,14 +5,22 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"time"
+	"web_go/Utils/Config"
 	"web_go/Utils/File"
 )
+
+var configs Config.Config
 
 func init() {
 	// 设置日志格式为json格式
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	dir, _ := os.Getwd()
-	filePath := dir + "/Storage/logs/"
+	//获取配置文件
+	//todo::实现容器单列模式注入配置直接获取 不需要每次使用都扫描获取配置
+	configs.GetInstance().ScanConfig()
+	configs.GetInstance().GetConfig()
+
+	filePath := dir + configs.GetInstance().GetString("log.path") + "/logs/"
 	dirErr := File.CreateIfNotExistDir(filePath)
 	if dirErr == false {
 		//todo::目录创建失败异常操作
