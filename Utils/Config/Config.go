@@ -28,7 +28,8 @@ func init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	os.Getenv(".env")
+	dir, _ := os.Getwd()
+	os.Getenv(dir + "/.env")
 	yamlPath = os.Getenv("YAML_PATH")
 
 }
